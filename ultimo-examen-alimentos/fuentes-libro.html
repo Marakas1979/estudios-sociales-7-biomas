@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Visor accesible y ampliable de las páginas 202 a 213 del libro de Estudios Sociales de séptimo año.">
+<title>Páginas del libro · Estudios Sociales 7.º</title>
+<style>
+:root{color-scheme:light;--ink:#183345;--green:#194735;--line:#c5d3cb;--gold:#b87912;--focus:#f0a52b}
+*{box-sizing:border-box}body{margin:0;background:#edf2ee;color:var(--ink);font:1.08rem/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,a{font:inherit}a{color:#124d70}button:focus-visible,a:focus-visible{outline:4px solid var(--focus);outline-offset:3px}.top{background:var(--green);color:#fff;padding:1rem clamp(1rem,4vw,3rem)}.top h1{margin:.1rem 0;font-size:clamp(1.45rem,3vw,2rem)}.top p{margin:.3rem 0}.top a{color:#fff}.shell{max-width:1200px;margin:1rem auto;padding:0 1rem}.panel{background:#fff;border:1px solid var(--line);border-radius:1rem;padding:1rem}.intro{margin:0 0 .8rem}.controls{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;border-block:1px solid var(--line);padding:.7rem 0}.controls button,.page-list button{background:#fff;border:2px solid #285c46;border-radius:.55rem;padding:.45rem .7rem;color:#193f31;font-weight:750}.controls button:hover,.page-list button:hover,.page-list button[aria-current=true]{background:#e7f2e9}.controls button:disabled{opacity:.45;cursor:not-allowed}.count{font-weight:800;margin-inline:auto}.help{color:#526875;font-size:.95rem}.viewer{margin:1rem auto;max-width:900px}.viewer h2{margin:.1rem 0 .4rem;font-size:1.35rem}.viewer figure{margin:0;background:#e9eef0;border:1px solid var(--line);border-radius:.5rem;padding:.5rem;overflow:auto;max-height:75vh;text-align:center}.viewer img{display:block;width:100%;height:auto;margin:auto;object-fit:contain}.page-list{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1rem}.page-list button{min-width:3.1rem}.tip{background:#fff3d8;border-left:6px solid var(--gold);padding:.7rem .9rem;border-radius:.4rem;margin:.8rem 0}.sr{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+@media(max-width:600px){.count{width:100%;order:3}.viewer figure{max-height:68vh;padding:.25rem}.controls button{flex:1}}
+@media print{body{background:#fff}.top,.intro,.controls,.page-list,.tip,.help{display:none!important}.shell{margin:0;padding:0}.panel{border:0;padding:0}.viewer{max-width:none;margin:0}.viewer h2{font-size:12pt}.viewer figure{border:0;background:#fff;padding:0;max-height:none;overflow:visible}.viewer img{width:auto;max-width:100%;height:auto;max-height:9.5in;page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="top"><h1>Fotos del libro · Estudios Sociales 7.º</h1><p><a href="index.html">Volver a la guía del examen</a></p></header>
+<main class="shell"><section class="panel" aria-label="Visor de páginas del libro">
+<p class="intro">Páginas 202–213 · Una página por vez · Usa los controles para ampliar el texto.</p>
+<div class="controls" aria-label="Controles de lectura">
+<button id="prev" type="button" aria-label="Ver página anterior">← Anterior</button><span class="count" id="count" aria-live="polite"></span>
+<button id="next" type="button" aria-label="Ver página siguiente">Siguiente →</button>
+<button id="fit" type="button" aria-label="Ajustar imagen al ancho">Ajustar al ancho</button>
+<button id="zoomOut" type="button" aria-label="Reducir ampliación">−</button><button id="zoomIn" type="button" aria-label="Aumentar ampliación">+</button>
+<button id="print" type="button">Imprimir esta página</button>
+</div>
+<p class="help">En teclado: usa las flechas izquierda y derecha para cambiar de página; + y − para ampliar o reducir.</p>
+<div class="viewer"><h2 id="pageTitle" tabindex="-1"></h2><figure><img id="pageImage" src="" alt="" draggable="false"></figure></div>
+<p class="tip">Si el texto se ve pequeño, pulsa <strong>+</strong> y desplázate por la imagen. Cada foto conserva la página original.</p>
+<nav class="page-list" id="pageList" aria-label="Ir directamente a una página"></nav>
+</section></main>
+<script>
+const pages=Array.from({length:12},(_,i)=>{const n=202+i;return{n,src:`fuentes-libro/p${n}.jpg`,alt:`Fotografía de la página ${n} del libro de Estudios Sociales de séptimo año.`}});
+let index=0,zoom=100;
+const img=document.getElementById('pageImage'), title=document.getElementById('pageTitle'), count=document.getElementById('count'), list=document.getElementById('pageList'), figure=img.closest('figure');
+function setPage(next,moveFocus=false){index=Math.max(0,Math.min(pages.length-1,next));const p=pages[index];img.src=p.src;img.alt=p.alt;title.textContent=`Página ${p.n}`;count.textContent=`Página ${p.n} de 213 · ${index+1} de ${pages.length}`;document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===pages.length-1;[...list.children].forEach((b,i)=>{if(i===index)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});applyZoom();if(moveFocus)title.focus()}
+function applyZoom(){img.style.width=zoom===100?'100%':`${zoom}%`;figure.style.maxHeight=zoom===100?'75vh':'75vh'}
+pages.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.textContent=p.n;b.setAttribute('aria-label',`Abrir página ${p.n}`);b.addEventListener('click',()=>setPage(i,true));list.append(b)});
+document.getElementById('prev').addEventListener('click',()=>setPage(index-1,true));document.getElementById('next').addEventListener('click',()=>setPage(index+1,true));document.getElementById('fit').addEventListener('click',()=>{zoom=100;applyZoom()});document.getElementById('zoomIn').addEventListener('click',()=>{zoom=Math.min(250,zoom+25);applyZoom()});document.getElementById('zoomOut').addEventListener('click',()=>{zoom=Math.max(100,zoom-25);applyZoom()});document.getElementById('print').addEventListener('click',()=>window.print());
+document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowRight')setPage(index+1,true);if(e.key==='ArrowLeft')setPage(index-1,true);if(e.key==='+'){zoom=Math.min(250,zoom+25);applyZoom()}if(e.key==='-'){zoom=Math.max(100,zoom-25);applyZoom()}});
+setPage(0);
+</script>
+</body></html>
